@@ -35,11 +35,26 @@ app.get('/login', function(req, res) {
     res.render('login')
 })
 
+app.post('/login', async function(req, res) {
+    const username = req.body.username;
+    const password = req.body.password;
+    await db.collection("users").findOne({ email: username }, function(err, foundOne) {
+        if (err) {
+            console.log(err)
+        } else {
+            if (foundOne) {
+                if (foundOne.password === password) {
+                    res.render("secrets")
+                }
+            }
+        }
+    })
+})
+
 app.get('/register', function(req, res) {
   //  const items = await db.collection("users").find().toArray()
     res.render('register')
 })
-
 
  app.post("/register", async function(req, res) {
     try {
@@ -47,8 +62,8 @@ app.get('/register', function(req, res) {
         //  res.json({ _id: info.insertedId, email: req.body.username, password: req.body.password })
         res.render("secrets")
     } catch {
-        if (error) {
-            console.log(error)
+        if (err) {
+            console.log(err)
         } else {
             res.render("secrets")
         }
@@ -56,4 +71,4 @@ app.get('/register', function(req, res) {
 })
 
 
-exports.module = app
+module.exports = app
