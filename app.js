@@ -1,8 +1,10 @@
 const express = require("express")
 const bodyParser = require("body-parser")
-const ejs = require("ejs")
 const app = express()
 const dotenv = require('dotenv')
+const md5 = require('md5')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 dotenv.config()
 
 let { MongoClient, ServerApiVersion, ObjectId } = require("mongodb")
@@ -14,7 +16,7 @@ async function start() {
    module.exports = client
    db = client.db()
    app.listen(process.env.PORT || 3000)
-   console.log("server started on port 3001.")
+   console.log("server started on port", process.env.PORT)
 }
 
 start()
@@ -27,6 +29,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
+const secret = process.env.SECRET;
+
 app.get('/', function(req, res) {
     res.render('home')
 })
@@ -37,7 +41,7 @@ app.get('/login', function(req, res) {
 
 app.post('/login', async function(req, res) {
     const username = req.body.username;
-    const password = req.body.password;
+    const password = md5(req.body.password);
     await db.collection("users").findOne({ email: username }, function(err, foundOne) {
         if (err) {
             console.log(err)
@@ -58,9 +62,16 @@ app.get('/register', function(req, res) {
 
  app.post("/register", async function(req, res) {
     try {
-        const info = await db.collection("users").insertOne({ email: req.body.username, password: req.body.password })
+        await bcrypt.hash(req.body.password, saltRounds, function(err, hash){
+        const info = db.collection("users").insertOne({ email: req.body.username, password: hash })
         //  res.json({ _id: info.insertedId, email: req.body.username, password: req.body.password })
-        res.render("secrets")
+        console.log(info)
+        if (err) {
+            console.log(err)
+            return res.status('400')
+        }
+        return res.render("secrets")
+        })
     } catch {
         if (err) {
             console.log(err)
