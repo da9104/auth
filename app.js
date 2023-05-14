@@ -45,9 +45,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: 'http://localhost:3001/auth/google/secrets',
     userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
-},
-
-function(accessToken, refreshToken, profile, cd) {
+}, function(accessToken, refreshToken, profile, cd) {
     return new Promise(async (resolve, reject) => {
      if (!this.errors.length) {
          await User.findAndModify({
@@ -60,8 +58,8 @@ function(accessToken, refreshToken, profile, cd) {
          })
          resolve("success")
      } else {
-            cd(err, user)
-            resolve("failure")
+         cd(user)
+         reject("failure")
       }
     })
     // User.findOrCreate({ googleId: profile.id}, function(err, user) {
@@ -210,10 +208,10 @@ app.post('/register', function(req, res) {
     })
  })
 
- app.get('/auth/google', function(req, res) {
-    passport.authenticate('google', { scope: ['profile']})
- })
+ app.route('/auth/google').get(passport.authenticate('google', 
+ {scope: ['profile']}));
 
+ 
 // Login & Register using hashing function
 // 
 // app.post('/login', async function(req, res) {

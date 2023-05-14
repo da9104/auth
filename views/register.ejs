@@ -1,9 +1,12 @@
 <%- include('partials/header') %>
 
-<% Promise.resolve(regiErrors.forEach(function(message) { %>
+<!-- <% Promise.resolve(regiErrors.forEach(function(message) { %>
   <div id="flash" class="alert alert-danger small"><%= message %></div>
-<% })) %>
+<% })) %> -->
 
+<% regiErrors.forEach(function(message) { %>
+  <div id="flash" class="alert alert-danger text-center"><%= message %></div>
+<% }) %>
 
 <div class="container mt-5">
   <h1>Register</h1>

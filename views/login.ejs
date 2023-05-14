@@ -1,8 +1,8 @@
 <%- include('partials/header') %>
 
-<% Promise.resolve(errors.forEach(function(message) { %>
+<!-- <% Promise.resolve(errors.forEach(function(message) { %>
   <div id="flash" class="alert alert-danger small"><%= message %></div>
-<% })) %>
+<% })) %> -->
 
 <% errors.forEach(function(message) { %>
   <div id="flash" class="alert alert-danger text-center"><%= message %></div>
