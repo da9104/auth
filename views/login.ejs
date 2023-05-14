@@ -4,6 +4,11 @@
   <div id="flash" class="alert alert-danger small"><%= message %></div>
 <% })) %>
 
+<% errors.forEach(function(message) { %>
+  <div id="flash" class="alert alert-danger text-center"><%= message %></div>
+<% }) %>
+
+
 <div class="container mt-5">
   <h1>Login</h1>
   <div class="row">

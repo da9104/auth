@@ -211,7 +211,7 @@ app.post('/register', function(req, res) {
  })
 
  app.get('/auth/google', function(req, res) {
-
+    passport.authenticate('google', { scope: ['profile']})
  })
 
 // Login & Register using hashing function
