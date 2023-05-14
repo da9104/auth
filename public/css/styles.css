@@ -3,6 +3,12 @@ body {
   background-color: #E8ECEF;
 }
 
+#flash {
+  opacity: 1;
+  transition: opacity .33s;
+  will-change: opacity;
+}
+
 .centered {
     padding-top: 200px;
     text-align: center;

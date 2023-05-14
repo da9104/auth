@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
   <title>Secrets</title>
@@ -8,5 +7,24 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
+
+  <% errors.forEach(function(message) { %>
+    <div id="flash" class="alert alert-danger text-center"><%= message %></div>
+  <% }) %>
+
+  <script>
+    function flash() {
+    setTimeout(() => {
+        var list = document.querySelectorAll("#flash");
+        for (let i = 0; i < list.length; i++) {
+          list[i].style.opacity = "0";
+        }
+        //  let message = document.getElementById("flash");
+        //  message.style.opacity = '0';
+        //  let message = this.flashMessage
+        //  Change the message opacity      
+         setTimeout(() => document.querySelectorAll('#flash .alert-danger').parentElement.removeChild(message), 1500)},
+         2000)}
+    flash();
+  </script>
