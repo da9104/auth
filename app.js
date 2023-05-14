@@ -211,7 +211,12 @@ app.post('/register', function(req, res) {
  app.route('/auth/google').get(passport.authenticate('google', 
  {scope: ['profile']}));
 
- 
+ app.route('/auth/google/secrets').get(passport.authenticate('google', 
+ {failureRedirect: '/login'}), function(req, res) {
+    //then user logged in successfully, 
+    return res.render('secrests')
+ })
+
 // Login & Register using hashing function
 // 
 // app.post('/login', async function(req, res) {
