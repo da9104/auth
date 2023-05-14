@@ -154,7 +154,7 @@ app.get('/', function(req, res) {
     if (req.session.user) {
         res.render('secrets')
     } else {
-        res.render('home')
+        res.render('home', {errors: req.flash('errors')})
     }
    // res.render('home')
 })
@@ -179,7 +179,7 @@ app.post('/login', function(req, res) {
     console.log(e)
     req.flash('errors', e)
     req.session.save(function() {
-      res.redirect('/')
+      res.redirect('/login')
     })
   })
 })
@@ -210,6 +210,9 @@ app.post('/register', function(req, res) {
     })
  })
 
+ app.get('/auth/google', function(req, res) {
+
+ })
 
 // Login & Register using hashing function
 // 
