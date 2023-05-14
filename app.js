@@ -43,28 +43,18 @@ app.use(passport.session())
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'http://localhost:3001/auth/google/secrets',
+    callbackURL: `http://localhost:${process.env.PORT || 3001}/auth/google/secrets`,
     userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
 }, function(accessToken, refreshToken, profile, cd) {
     return new Promise(async (resolve, reject) => {
-     if (!this.errors.length) {
-         await User.findAndModify({
-             query: { _id: new ObjectID(this.requestedPostId)},
-             update: {
-               $setOnInsert: { googleId: profile._id }
-             },
-             new: true,   // return new doc if one is upserted
-             upsert: true // insert the document if it does not exist
-         })
+     if (!User.errors) {
+         await usersCollection.findOneAndUpdate({ _id: new ObjectID(this.requestedPostId)}, 
+         {$set: { googleId: profile._id }})
          resolve("success")
      } else {
-         cd(user)
          reject("failure")
       }
     })
-    // User.findOrCreate({ googleId: profile.id}, function(err, user) {
-    //     return cd(err, user)
-    // })
 }))
    
 
@@ -133,7 +123,7 @@ User.prototype.register = function() {
 }
 
 User.prototype.login = function() {
-    return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
       this.cleanUp()
       usersCollection.findOne({username: this.data.username}).then((attemptedUser) => {
         if (attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)) {
@@ -214,7 +204,7 @@ app.post('/register', function(req, res) {
  app.route('/auth/google/secrets').get(passport.authenticate('google', 
  {failureRedirect: '/login'}), function(req, res) {
     //then user logged in successfully, 
-    return res.render('secrests')
+    return res.render('secrets')
  })
 
 // Login & Register using hashing function
